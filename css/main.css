@@ -126,7 +126,8 @@ button:focus-visible{outline:4px solid #ffcf33;outline-offset:3px}
 
 /* ---------- menu ---------- */
 #menu .wrap{gap:3vh;padding:88px 16px 12px}
-.cards{--cw:min(16vw,30vh,200px);--gap:clamp(10px,2vw,24px);display:flex;flex-wrap:wrap;gap:var(--gap);justify-content:center}
+.cards{--cw:min(17vw,24vh,200px);--gap:clamp(10px,2vw,24px);display:flex;flex-wrap:wrap;gap:var(--gap);justify-content:center;
+  max-width:calc(var(--cw) * 3 + var(--gap) * 2 + 2px)}
 .card{width:var(--cw);height:var(--cw);border:none;border-radius:30px;padding:calc(var(--cw) * .07);background:var(--cbg);box-shadow:0 10px 0 var(--cshadow);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;cursor:pointer;
   animation:popin .5s cubic-bezier(.3,1.6,.5,1) backwards;transition:transform .15s,box-shadow .15s}
@@ -193,10 +194,17 @@ button:focus-visible{outline:4px solid #ffcf33;outline-offset:3px}
 .ans.wrong{animation:shake .45s;opacity:.4;cursor:default}
 .ans.right{background:#c9f5b8;box-shadow:0 9px 0 #5cb84a;transform:scale(1.1)}
 .flyer{position:absolute;left:0;top:0;width:1em;height:1em;margin:-.5em 0 0 -.5em;line-height:1;text-align:center}
+/* "look here" pulse used for hints */
+.glow{animation:glow 1s ease-in-out infinite!important}
+@keyframes glow{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 #ffcf33)}50%{transform:scale(1.08);filter:drop-shadow(0 0 14px #ffcf33)}}
 
 @media (max-aspect-ratio:1/1){
-  .cards{--cw:min(28vw,19vh,190px);max-width:calc(var(--cw) * 3 + var(--gap) * 2 + 2px)}
+  .cards{--cw:min(28vw,19vh,190px)}
   #menu .poppy{height:min(24vh,230px)}
+}
+/* very wide, short screens (phones sideways): all cards on one row */
+@media (min-aspect-ratio:2/1){
+  .cards{max-width:none}
 }
 @media (max-width:640px){
   .cstage{top:128px}

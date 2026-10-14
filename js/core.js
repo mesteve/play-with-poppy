@@ -62,7 +62,8 @@ function pickVoice() {
   } catch (e) {}
 }
 if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
-function say(text) {
+/* opts.pitch / opts.rate let other characters (like Bakery customers) sound different */
+function say(text, opts = {}) {
   if (!soundOn || !canSpeak) return;
   try {
     clearTimeout(sayTimer);
@@ -70,7 +71,7 @@ function say(text) {
     sayTimer = setTimeout(() => {
       const u = new SpeechSynthesisUtterance(text);
       if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = 'en-US';
-      u.pitch = 1.45; u.rate = 1.02;
+      u.pitch = opts.pitch || 1.45; u.rate = opts.rate || 1.02;
       speechSynthesis.speak(u);
     }, 50);
   } catch (e) {}
@@ -91,14 +92,44 @@ const POPPY_SVG = `<svg viewBox="0 0 200 240" aria-hidden="true"><g class="p-all
 <ellipse class="f-blush" cx="68" cy="122" rx="8" ry="5"/><ellipse class="f-blush" cx="132" cy="122" rx="8" ry="5"/>
 <g class="p-eyes"><ellipse class="f-ink" cx="78" cy="92" rx="8" ry="10"/><ellipse class="f-ink" cx="122" cy="92" rx="8" ry="10"/><circle class="f-white" cx="81" cy="88" r="3"/><circle class="f-white" cx="125" cy="88" r="3"/></g>
 <ellipse class="f-ink" cx="100" cy="114" rx="9" ry="6.5"/><path class="p-mouth" d="M100 120V124M90 124Q100 133 110 124"/>
+<!--outfit-->
 </g>
 <g class="p-arm"><ellipse class="f-dark" cx="140" cy="188" rx="11" ry="21" transform="rotate(-16 140 188)"/></g>
 </g></svg>`;
 
+/* Things Poppy can wear (bought in the Bakery shop). One item per slot; Poppy wears them in every game.
+   x/y/size are in the head's coordinates (200x240 drawing), so they tilt along with the head. */
+const OUTFIT = {
+  bow:     { e: '🎀', name: 'bow', slot: 'ear', price: 3, x: 146, y: 44, size: 42, rot: 16 },
+  flower:  { e: '🌸', name: 'flower', slot: 'ear', price: 3, x: 54, y: 46, size: 40, rot: -14 },
+  glasses: { e: '🕶️', name: 'sunglasses', slot: 'face', price: 4, x: 100, y: 92, size: 66, rot: 0 },
+  cap:     { e: '🧢', name: 'cap', slot: 'head', price: 5, x: 100, y: 40, size: 70, rot: -6 },
+  sunhat:  { e: '👒', name: 'sun hat', slot: 'head', price: 6, x: 100, y: 32, size: 84, rot: 0 },
+  tophat:  { e: '🎩', name: 'top hat', slot: 'head', price: 8, x: 100, y: 26, size: 72, rot: 0 },
+  crown:   { e: '👑', name: 'crown', slot: 'head', price: 10, x: 100, y: 34, size: 62, rot: 0 }
+};
+let poppyWear = loadData('poppy-outfit', {});
+if (typeof poppyWear !== 'object' || Array.isArray(poppyWear)) poppyWear = {};
+const allPoppies = new Set();
+function poppySVG() {
+  const items = Object.values(poppyWear).map(id => OUTFIT[id]).filter(Boolean).map(o =>
+    `<text x="${o.x}" y="${o.y}" font-size="${o.size}" text-anchor="middle" dominant-baseline="central" transform="rotate(${o.rot} ${o.x} ${o.y})">${o.e}</text>`);
+  return POPPY_SVG.replace('<!--outfit-->', items.join(''));
+}
+/* Put an item on (or take a slot off with id = null); every Poppy on the page updates */
+function setWear(slot, id) {
+  if (id) poppyWear[slot] = id; else delete poppyWear[slot];
+  saveData('poppy-outfit', poppyWear);
+  const svg = poppySVG();
+  allPoppies.forEach(el => { if (el.isConnected) el.innerHTML = svg; else allPoppies.delete(el); });
+}
+
 function makePoppy(el, classes) {
   el.classList.add('poppy');
   classes.split(' ').filter(Boolean).forEach(c => el.classList.add(c));
-  el.innerHTML = POPPY_SVG;
+  el.innerHTML = poppySVG();
+  allPoppies.forEach(p => { if (!p.isConnected) allPoppies.delete(p); });
+  allPoppies.add(el);
   el.addEventListener('pointerdown', e => { e.stopPropagation(); tickle(el); });
   return el;
 }

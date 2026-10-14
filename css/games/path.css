@@ -57,8 +57,6 @@
 .tok.num{font-weight:700;font-size:calc(var(--tok) * .5);color:#4a3426}
 .tok.blank{background:rgba(255,255,255,.3);border:4px dashed #fff;box-shadow:none;color:#fff;font-weight:700;font-size:calc(var(--tok) * .5)}
 .tok.away{opacity:.22;filter:grayscale(1)}
-.glow{animation:glow 1s ease-in-out infinite!important}
-@keyframes glow{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 #ffcf33)}50%{transform:scale(1.08);filter:drop-shadow(0 0 14px #ffcf33)}}
 .presult{position:absolute;inset:0;z-index:30;display:none;place-items:center;background:rgba(20,30,60,.35)}
 .presult.show{display:grid}
 .rcard{background:#fff;border-radius:36px;padding:clamp(18px,3vh,32px) clamp(28px,5vw,60px);display:flex;flex-direction:column;align-items:center;gap:2.4vh;
