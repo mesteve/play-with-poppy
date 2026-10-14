@@ -1,0 +1,11 @@
+/* ---------- Counting ---------- */
+.c-count{--cbg:#fff0d4;--cshadow:#eeb05a}
+.plus{font-weight:700;font-size:calc(var(--tok) * .95);line-height:1;color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.15)}
+#cPoppy{flex:none;height:clamp(104px,min(24vh,30vw),200px)}
+.basket{position:relative;margin-top:40px;padding:14px 18px 20px;border-radius:16px 16px 46px 46px;
+  background:repeating-linear-gradient(90deg,#d99a52 0 12px,#c98a44 12px 24px);box-shadow:0 7px 0 #9a6430;
+  display:grid;grid-template-columns:repeat(var(--cols),calc(var(--tok) * .85));gap:8px}
+.basket::before{content:"";position:absolute;left:20%;right:20%;top:-40px;height:52px;border:8px solid #b97a3a;border-bottom:none;border-radius:999px 999px 0 0}
+.bslot{width:calc(var(--tok) * .85);aspect-ratio:1;border-radius:50%;border:3px dashed rgba(255,255,255,.9);background:rgba(255,255,255,.18);
+  display:grid;place-items:center;font-size:calc(var(--tok) * .5);line-height:1}
+.bslot.full{border-style:solid;background:rgba(255,255,255,.8);animation:starpop .35s cubic-bezier(.3,1.8,.5,1)}

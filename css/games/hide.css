@@ -1,0 +1,18 @@
+/* ---------- Hide and seek ---------- */
+.c-hide{--cbg:#e2f7dc;--cshadow:#7fc472}
+.spots{position:absolute;left:0;right:0;bottom:7%;display:flex;justify-content:center;align-items:flex-end;gap:2.5vw;z-index:2}
+.spot{position:relative;width:min(22vw,36vh,230px);aspect-ratio:6/5;border:none;background:none;padding:0;cursor:pointer;
+  animation:popin .45s cubic-bezier(.3,1.6,.5,1) backwards}
+.spot:focus-visible{outline-offset:8px;border-radius:16px}
+.cover{position:absolute;inset:0;z-index:2;transform-origin:50% 100%}
+.cover svg{display:block;width:100%;height:100%;overflow:visible}
+.spot .hider{position:absolute;left:10%;bottom:0;width:80%;z-index:1;opacity:0;pointer-events:none;transform:translateY(12%);
+  transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .2s}
+.spot.found .hider{opacity:1;pointer-events:auto;transform:translateY(-26%)}
+.peek{position:absolute;z-index:1;width:36%;opacity:0;transform:translateX(-40%);transition:opacity .3s,transform .4s}
+.peek svg{display:block;width:100%;transform-origin:0% 60%}
+.spot.hint .peek{opacity:1;transform:translateX(0)}
+.spot.hint .peek svg{animation:peekwag .5s ease-in-out infinite alternate}
+.spot.found .peek{opacity:0}
+.spot.nope .cover{animation:shake .45s}
+@keyframes peekwag{from{transform:rotate(-14deg)}to{transform:rotate(12deg)}}
