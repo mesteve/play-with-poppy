@@ -234,7 +234,8 @@ const FRUITS = [
   { e: '🍪', one: 'cookie', many: 'cookies' }, { e: '🧁', one: 'cupcake', many: 'cupcakes' },
   { e: '🌸', one: 'flower', many: 'flowers' }, { e: '🐞', one: 'ladybug', many: 'ladybugs' }
 ];
-const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten',
+  'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
 const Word = n => WORDS[n][0].toUpperCase() + WORDS[n].slice(1);
 const nm = (f, n) => (n === 1 ? f.one : f.many);
 const randInt = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
@@ -243,7 +244,7 @@ function dotsSVG(n, color = '#ff7a3d') {
   if (n <= 6) return `<svg class="dots" viewBox="0 0 30 30">${DICE[n].map(p => `<circle cx="${5 + (p % 3) * 10}" cy="${5 + Math.floor(p / 3) * 10}" r="3.7" fill="${color}"/>`).join('')}</svg>`;
   let s = '';
   for (let i = 0; i < n; i++) s += `<circle cx="${5 + (i % 5) * 10}" cy="${5 + Math.floor(i / 5) * 10}" r="3.7" fill="${color}"/>`;
-  return `<svg class="dots" viewBox="0 0 50 20">${s}</svg>`;
+  return `<svg class="dots" viewBox="0 0 50 ${Math.ceil(n / 5) * 10}">${s}</svg>`;
 }
 const ANS_COLORS = [['#ffe1e1', '#f08f8f'], ['#fff1c9', '#e9bf4f'], ['#dcefff', '#7fb8ec']];
 const countTone = k => tone(392 * Math.pow(2, (k - 1) / 7), 0.18, 'triangle', 0.25);

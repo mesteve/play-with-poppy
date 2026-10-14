@@ -30,12 +30,16 @@ const screen = addScreen('path', `
 /* A map of stepping stones. Each stone is a 5-question level that earns 1-3 stars
    and a sticker; finishing a stone unlocks the next. Progress lives in localStorage. */
 const PATH_KEY = 'poppy-path';
-const STICKERS = ['🐞', '🌻', '🐢', '🍓', '🦋', '🌈', '🐙', '🚀', '🦄', '🍦', '🐳', '👑'];
+const STICKERS = ['🐞', '🌻', '🐢', '🍓', '🦋', '🌈', '🐙', '🚀', '🦄', '🍦', '🐳', '👑', '🐬', '🍉', '🎈', '🦖', '🐧', '🌟', '🦩', '🏆'];
 const HARD = { more: { max: 8, fewer: true }, match: { max: 10 }, pattern: { kinds: ['ABC', 'AAB', 'ABB'] }, missing: { max: 10 }, takeaway: { max: 8 }, bigger: { max: 10 } };
+/* stones 13-20: the same questions with slightly bigger numbers and longer patterns */
+const HARDER = { more: { max: 10, fewer: true }, match: { max: 12 }, pattern: { kinds: ['AABB', 'ABCC', 'ABAC'] }, missing: { max: 15 }, takeaway: { max: 10 }, bigger: { max: 15 } };
 const LEVELS = [
   { t: 'more', max: 5 }, { t: 'match', max: 5 }, { t: 'pattern', kinds: ['AB'] }, { t: 'missing', max: 5 },
   { t: 'takeaway', max: 5 }, { t: 'more', ...HARD.more }, { t: 'match', ...HARD.match }, { t: 'pattern', ...HARD.pattern },
-  { t: 'missing', ...HARD.missing }, { t: 'takeaway', ...HARD.takeaway }, { t: 'bigger', ...HARD.bigger }, { t: 'mix' }
+  { t: 'missing', ...HARD.missing }, { t: 'takeaway', ...HARD.takeaway }, { t: 'bigger', ...HARD.bigger }, { t: 'mix', set: HARD },
+  { t: 'more', ...HARDER.more }, { t: 'match', ...HARDER.match }, { t: 'pattern', ...HARDER.pattern }, { t: 'missing', ...HARDER.missing },
+  { t: 'takeaway', ...HARDER.takeaway }, { t: 'bigger', ...HARDER.bigger }, { t: 'missing', max: 20 }, { t: 'mix', set: HARDER }
 ];
 const PAT = FRUITS.filter(f => ['🍎', '🍌', '🐟', '🌸', '🥕', '🍪'].includes(f.e));
 const CREATURES = [
@@ -112,7 +116,9 @@ function renderMap(from) {
 function layoutMap(from) {
   const W = pMap.clientWidth, H = pMap.clientHeight;
   if (!W || !H) return;
-  const cols = W > H * 2.2 ? 6 : W > H * 1.1 ? 4 : 3, rows = Math.ceil(LEVELS.length / cols);
+  const cols = W > H * 2.2 ? 7 : W > H * 1.1 ? 5 : 4, rows = Math.ceil(LEVELS.length / cols);
+  /* stones shrink to leave room for Poppy above and the stars below */
+  pStones.style.setProperty('--s', Math.round(clamp(Math.min((W / cols) * 0.62, (H / rows) * 0.5), 40, 110)) + 'px');
   pStones.style.setProperty('--pc', cols);
   pStones.style.setProperty('--pr', rows);
   [...pStones.children].forEach((s, i) => {
@@ -199,7 +205,7 @@ function pRound(first) {
   pBoard.innerHTML = ''; pRight.innerHTML = '';
   const L = LEVELS[P.level];
   let t = L.t, opt = L;
-  if (t === 'mix') { t = pick(Object.keys(HARD).filter(k => k !== P.lastType)); opt = HARD[t]; }
+  if (t === 'mix') { t = pick(Object.keys(L.set).filter(k => k !== P.lastType)); opt = L.set[t]; }
   P.lastType = t;
   const intro = first ? `Level ${P.level + 1}! ` : '';
   if (!BUILD[t](opt, intro)) pLater(() => say(intro + P.question), 350);
@@ -232,7 +238,7 @@ function tileRow(items, size) {
   const g = document.createElement('div');
   g.className = 'grp';
   g.style.setProperty('--cols', size || items.length);
-  if (items.length > 5) g.style.setProperty('--tok', `clamp(34px,calc((min(94vw,920px) - 60px) / ${items.length} - 14px),86px)`);
+  if (items.length > 5) g.style.setProperty('--tok', `clamp(28px,calc((min(94vw,920px) - 60px) / ${items.length} - 14px),86px)`);
   const tiles = items.map((txt, i) => {
     const t = document.createElement('div');
     t.className = 'tok still' + (txt === '?' ? ' blank' : '');
@@ -339,7 +345,7 @@ const BUILD = {
   pattern(o) {
     const kind = pick(o.kinds), items = shuffle(PAT).slice(0, 4);
     const unit = kind.split('').map(ch => items[ch.charCodeAt(0) - 65]);
-    const len = unit.length * 2 + randInt(0, 1), seq = [];
+    const len = unit.length === 4 ? randInt(6, 8) : unit.length * 2 + randInt(0, 1), seq = [];
     for (let i = 0; i < len; i++) seq.push(unit[i % unit.length]);
     const ans = unit[len % unit.length];
     const choices = [...new Set(unit)];

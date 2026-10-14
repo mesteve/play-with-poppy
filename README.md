@@ -25,7 +25,7 @@ A few rules the game follows:
 | 🌳 | **Hide and seek** | Poppy hides behind a bush, a box, a pot or a playhouse. If you need help, Poppy's tail peeks out as a hint. | Looking carefully, finding hidden things |
 | 🎵 | **Music** | Tap an 8-note rainbow xylophone while Poppy dances, or press the star to hear *Twinkle Twinkle Little Star*. | Rhythm, sounds, free play |
 | 🍎 | **Counting** | "How many apples?", "Give me three strawberries" and simple additions. Numbers go up to 5, then 7, then 10 as the child gets better. | Counting, number recognition, first additions |
-| ⭐ | **Number path** | A trail of 12 stepping stones, each a short level of 5 questions. Finishing a stone earns 1 to 3 stars, a sticker, and unlocks the next one. | Comparing amounts, reading numbers, patterns, number order, first take-aways |
+| ⭐ | **Number path** | A trail of 20 stepping stones, each a short level of 5 questions. Finishing a stone earns 1 to 3 stars, a sticker, and unlocks the next one. | Comparing amounts, reading numbers, patterns, number order, first take-aways |
 | 🧁 | **Bakery** | Animal customers come to Poppy's bakery with orders. Each one served pays a coin, and coins buy things for Poppy to wear. | Counting on, fair sharing, seeing numbers at a glance, shapes, ordering by size |
 
 Each game has a star tray that fills up as the child plays, followed by a big confetti celebration.
@@ -43,6 +43,8 @@ Number path is a step up from Counting, for children around 4 who are ready for 
 | 5 and 10 | Little take-away stories: "Five ducks. Two swim away. How many are left?" |
 | 11 | Which number is bigger? (just the numbers, no dots) |
 | 12 | A mix of everything |
+| 13 to 19 | The same questions again with numbers a little higher: more/fewer up to 10, matching up to 12, longer patterns (🍎🍎🍌🍌, 🍎🍌🍎🐟), missing numbers up to 15 then 20, take-aways up to 10, bigger number up to 15 |
+| 20 | A mix of everything, with the bigger numbers |
 
 A wrong answer is never a failure. The first one brings a hint (Poppy counts along, or shows the dots), and the second one makes the right answer glow. Stars only reflect how many tries it took: 3 stars for at most one slip, 2 for a few, 1 otherwise. Any finished stone can be replayed to earn more stars.
 

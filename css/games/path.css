@@ -14,8 +14,8 @@
 .pline path{fill:none;stroke-linecap:round;stroke-linejoin:round}
 .pline .road{stroke:rgba(255,255,255,.35);stroke-width:26}
 .pline .dash{stroke:#fff;stroke-width:9;stroke-dasharray:1 22}
-.pstones{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--pc,4),1fr);grid-template-rows:repeat(var(--pr,3),1fr);place-items:center}
-.stone{--s:clamp(48px,min(17vw,11vh),110px);position:relative;z-index:1;width:var(--s);aspect-ratio:1;border:none;border-radius:50%;padding:0;cursor:pointer;
+.pstones{position:absolute;inset:0;display:grid;grid-template-columns:repeat(var(--pc,4),1fr);grid-template-rows:repeat(var(--pr,3),1fr);place-items:center;--s:72px}
+.stone{position:relative;z-index:1;width:var(--s);aspect-ratio:1;border:none;border-radius:50%;padding:0;cursor:pointer;
   background:#fff;color:#4a3426;box-shadow:0 7px 0 rgba(0,0,0,.18);display:grid;place-items:center;font-weight:700;font-size:calc(var(--s) * .42);
   animation:popin .45s cubic-bezier(.3,1.6,.5,1) backwards}
 .stone b{line-height:1}
@@ -75,7 +75,7 @@
 }
 @media (max-width:640px){
   .pstat{top:82px}
-  .pmap{top:136px}
+  .pmap{top:136px;bottom:72px}
 }
 @media (prefers-reduced-motion:reduce){
   .stone.current{animation:none}
