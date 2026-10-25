@@ -6,7 +6,7 @@ A gentle little playroom for toddlers and preschoolers, hosted by Poppy the fox.
 
 ## The goal
 
-Play with Poppy gives young children a calm, safe place to play on a phone, tablet or computer, while practicing a few early skills: cause and effect, finding hidden things, making music and counting.
+Play with Poppy gives young children a calm, safe place to play on a phone, tablet or computer, while practicing a few early skills: cause and effect, finding hidden things, making music, counting, and first letters and words.
 
 Kids don't need to read anything. Poppy says every instruction out loud, and every tap gets a sound, an animation or a cheer.
 
@@ -15,7 +15,7 @@ A few rules the game follows:
 - **No reading needed.** Poppy speaks every question, and a speaker button replays it.
 - **No way to fail.** A wrong tap gets a friendly "boing" and a hint, never a "game over".
 - **Made for little hands.** Big buttons, big targets, and mashing the keyboard does something fun.
-- **Nothing to sign up for.** No ads, no accounts, no analytics. The only things saved, on the device itself, are whether the sound is on, the Number path and Bakery progress, and what Poppy is wearing.
+- **Nothing to sign up for.** No ads, no accounts, no analytics. The only things saved, on the device itself, are whether the sound is on, the Number path, Bakery and ABC progress, and what Poppy is wearing.
 
 ## The games
 
@@ -26,6 +26,7 @@ A few rules the game follows:
 | 🎵 | **Music** | Tap an 8-note rainbow xylophone while Poppy dances, or press the star to hear *Twinkle Twinkle Little Star*. | Rhythm, sounds, free play |
 | 🍎 | **Counting** | "How many apples?", "Give me three strawberries" and simple additions. Numbers go up to 5, then 7, then 10 as the child gets better. | Counting, number recognition, first additions |
 | ⭐ | **Number path** | A trail of 20 stepping stones, each a short level of 5 questions. Finishing a stone earns 1 to 3 stars, a sticker, and unlocks the next one. | Comparing amounts, reading numbers, patterns, number order, first take-aways |
+| 🔤 | **ABC** | One new letter per round ("M comme Maison"), then letter games, and a present to open with the letter's card for the ABC album. In French or English. | Recognizing letters, first letter of a word, copying first words |
 | 🧁 | **Bakery** | Animal customers come to Poppy's bakery with orders. Each one served pays a coin, and coins buy things for Poppy to wear. | Counting on, fair sharing, seeing numbers at a glance, shapes, ordering by size |
 
 Each game has a star tray that fills up as the child plays, followed by a big confetti celebration.
@@ -64,12 +65,29 @@ Every 8 customers the bakery goes up a level, with 3 bonus coins, and the orders
 
 Coins are spent in the shop (the pink bag button) on a bow, a flower, sunglasses, a cap, a sun hat, a top hat or a crown, from 3 to 10 coins. To pay, the child taps the right number of coins, so even shopping is counting. Poppy then wears the new item **in every game**, and tapping an item in the shop puts it on or takes it off.
 
+### ABC, the letter game (🇫🇷 / 🇬🇧)
+
+Each round starts by meeting a new letter, in an order that suits beginners (A, O, I, M, P, L, S, T… with tricky ones like Q, X, W and Y last). Then come 5 little questions that mix it with the letters already learned:
+
+| Question | What the child does |
+|---|---|
+| 🔍 **Find the letter** | "Trouve la lettre M !" Tap the right balloon. |
+| 🎈 **Pop the balloons** | Pop all the M's among letters that look alike (M, N, W…). |
+| 🍍 **First letter** | A picture and its word with the first letter missing (? N A N A S). Which letter goes first? |
+| ✏️ **Write a word** | Copy CHAT, LUNE, PAPA, MAMAN… (CAT, DOG, MOM in English) by tapping the letters in order. |
+
+Balloons and tiles get random colors, so the child has to recognize the letter's shape, not its color. Letters are named the way children say them (in French "emme", "ache", "i grec"; in English "em", "aitch", "why"), and a wrong tap names the letter that was tapped.
+
+**Rewards:** each round ends with a present to tap open three times. Inside is the card of the new letter (letter, picture, word), which flies into the **ABC album** (📖). The album holds all 26 cards; tapping one says "M comme Maison". Each card also earns up to 3 stars as the child practices that letter.
+
+The FR / EN button at the top switches the language. Progress is shared: the letters are the same, only the words and the voice change. The French voice needs a French voice on the device (iPhone and iPad have one built in).
+
 ## Tips for grown-ups
 
 - **Add it to the home screen.** On iPhone or iPad, open the link in Safari, then tap Share → *Add to Home Screen*. It opens like an app.
 - **Go full screen** with the corner button so little fingers stay in the game.
 - **Sound on.** Poppy's voice uses the device's built-in speech, so make sure the device isn't muted.
-- **Progress is saved on this device** (Number path stars, Bakery coins and level, Poppy's outfit), in this browser's local storage. It doesn't follow the child to another device, and clearing the browser's data erases it. On iPhone and iPad, adding the game to the Home Screen keeps it safest: Safari may clear storage for websites that haven't been opened in a while.
+- **Progress is saved on this device** (Number path stars, Bakery coins and level, Poppy's outfit, the ABC album), in this browser's local storage. It doesn't follow the child to another device, and clearing the browser's data erases it. On iPhone and iPad, adding the game to the Home Screen keeps it safest: Safari may clear storage for websites that haven't been opened in a while.
 - **To start the path over**, press and hold the small ↺ button in the bottom corner of the map for a second and a half.
 
 ## How it's built

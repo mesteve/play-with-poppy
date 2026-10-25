@@ -1,0 +1,135 @@
+/* ---------- ABC (letters) ---------- */
+.c-letters{--cbg:#e3f3ff;--cshadow:#86b9e8}
+
+/* language switch, next to the Home button */
+.llang{position:absolute;top:18px;left:90px;z-index:5;display:flex;align-items:center;gap:6px;border:none;cursor:pointer;
+  background:#fff;color:#4a3426;border-radius:999px;padding:6px 16px 6px 10px;font:inherit;font-weight:700;font-size:clamp(18px,3.4vmin,26px);
+  line-height:1;box-shadow:0 5px 0 rgba(0,0,0,.12)}
+.llang span{font-size:1.3em}
+.llang:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.12)}
+
+.lstage{--lt:clamp(56px,min(11vw,12.5vh),104px)}
+#lPoppy{flex:none;height:clamp(96px,min(21vh,28vw),180px)}
+.lbig{color:hsl(var(--h) 75% 52%);font-size:1.15em}
+.lnew,.lspell{font-size:.9em}
+.lpicsm{display:grid;place-items:center;height:1.1em}
+.lsvg svg{display:block;width:1.1em;height:1.1em}
+.lcount{display:flex;gap:6px}
+.lcount i{width:.55em;height:.55em;border-radius:50%;border:3px solid #ffcf33;background:#fff}
+.lcount i.on{background:#ffcf33;animation:starpop .35s cubic-bezier(.3,1.8,.5,1)}
+
+.board.lcenter{flex-wrap:wrap}
+.board.lcol{flex-direction:column;gap:clamp(8px,2vh,22px)}
+.board.lsky{flex-wrap:wrap;align-content:center;gap:clamp(6px,1.6vw,18px) clamp(10px,2.4vw,26px)}
+
+/* meeting a new letter */
+.lmeet{display:flex;flex-direction:column;align-items:center;gap:6px;padding:clamp(14px,2.4vh,26px) clamp(26px,4vw,48px);border:none;border-radius:34px;cursor:pointer;
+  background:#fff;box-shadow:0 10px 0 hsl(var(--h) 60% 70%),0 0 0 10px rgba(255,255,255,.45);animation:popin .5s cubic-bezier(.3,1.6,.5,1) backwards,pulse 1.8s ease-in-out .6s infinite}
+.lmeet b{font-size:clamp(90px,min(20vw,24vh),200px);line-height:.9;color:hsl(var(--h) 75% 55%);text-shadow:0 6px 0 hsl(var(--h) 60% 80%)}
+.lmeet .lpic{font-size:clamp(46px,9vmin,84px);line-height:1}
+.lword{font-weight:700;font-size:clamp(20px,3.6vmin,32px);letter-spacing:.08em;color:#4a3426}
+.lmeet.go{animation:jump .62s cubic-bezier(.3,.7,.4,1)}
+
+/* letter balloons */
+.lball{--w:clamp(70px,min(14vw,18vh),130px);position:relative;width:var(--w);height:calc(var(--w) * 1.18);border:none;padding:0;cursor:pointer;
+  border-radius:50% 50% 47% 47% / 55% 55% 45% 45%;color:#fff;font:inherit;font-weight:700;font-size:calc(var(--w) * .58);line-height:1;
+  background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.65) 0 9%,transparent 22%),hsl(var(--h) 80% 60%);
+  box-shadow:inset -8px -10px 0 hsl(var(--h) 70% 50%);text-shadow:0 3px 0 hsl(var(--h) 70% 40%);margin-bottom:calc(var(--w) * .35);
+  animation:popin .45s cubic-bezier(.3,1.6,.5,1) backwards,bob 2.6s ease-in-out infinite}
+.lball::after{content:"";position:absolute;left:50%;top:100%;width:2px;height:calc(var(--w) * .38);background:rgba(90,70,60,.45);transform:translateX(-50%)}
+.lball::before{content:"";position:absolute;left:50%;top:calc(100% - 4px);border:7px solid transparent;border-bottom-color:hsl(var(--h) 70% 50%);transform:translateX(-50%)}
+.lball b{position:relative}
+.lball.small{--w:clamp(52px,min(10vw,12.5vh),96px)}
+.lball.wrong{opacity:.35}
+.lball.nope{animation:shake .45s}
+.lball.fly{animation:flyaway 1.2s ease-in forwards}
+.lball.popped{visibility:hidden}
+@keyframes flyaway{to{transform:translateY(-80vh) rotate(8deg)}}
+
+/* words: picture, letter slots, letter tiles */
+.lpic.big{font-size:clamp(70px,min(14vw,17vh),150px);line-height:1}
+.lpic.big .lsvg svg{width:1em;height:1em}
+.lwordrow{display:flex;gap:clamp(6px,1.2vw,12px);flex-wrap:wrap;justify-content:center}
+.lslot,.lch,.lgap{display:grid;place-items:center;width:calc(var(--lt) * .8);height:var(--lt);border-radius:16px;font-weight:700;font-size:calc(var(--lt) * .62);line-height:1}
+.lch{background:#fff;color:#4a3426;box-shadow:0 5px 0 rgba(0,0,0,.12)}
+.lgap{width:calc(var(--lt) * .3)}
+.lslot{border:4px dashed #ff7a3d;background:rgba(255,255,255,.55);color:#ff7a3d}
+.lslot.ghost{color:rgba(74,52,38,.22);border-color:rgba(255,255,255,.95)}
+.lslot.now{border-color:#ff7a3d;animation:pulse 1.2s ease-in-out infinite}
+.lslot.full{border-style:solid;border-color:hsl(var(--h,25) 70% 55%);background:#fff;color:hsl(var(--h,25) 75% 48%);animation:starpop .35s cubic-bezier(.3,1.8,.5,1)}
+.ltile{width:var(--lt);aspect-ratio:1;border:none;border-radius:20px;cursor:pointer;padding:0;font:inherit;font-weight:700;font-size:calc(var(--lt) * .6);line-height:1;
+  color:#fff;background:hsl(var(--h) 78% 60%);box-shadow:0 7px 0 hsl(var(--h) 65% 42%);text-shadow:0 2px 0 hsl(var(--h) 65% 40%);
+  animation:popin .4s cubic-bezier(.3,1.6,.5,1) backwards;transition:transform .12s,box-shadow .12s,opacity .25s}
+.ltile:active{transform:translateY(5px);box-shadow:0 2px 0 hsl(var(--h) 65% 42%)}
+.ltile.wrong{opacity:.35;cursor:default}
+.ltile.nope{animation:shake .45s}
+.ltile.used{visibility:hidden}
+.ltile.right{transform:scale(1.12)}
+
+/* the gift and the letter card */
+.loverlay{position:absolute;inset:0;z-index:30;display:none;place-items:center;background:rgba(20,30,60,.35);padding:12px}
+.loverlay.show{display:grid}
+.lgift{--grow:1;border:none;background:none;cursor:pointer;padding:0;transform:scale(var(--grow));transition:transform .25s cubic-bezier(.3,1.6,.5,1)}
+.lgift span{display:block;font-size:clamp(140px,30vmin,260px);line-height:1;animation:pulse 1.4s ease-in-out infinite;filter:drop-shadow(0 12px 0 rgba(0,0,0,.18))}
+.lgift.nope span{animation:shake .45s}
+.lreveal{display:flex;flex-direction:column;align-items:center;gap:3vh}
+.lnext{width:clamp(84px,14vmin,112px)}
+.lcard{--cw:clamp(64px,min(11vw,13vh),104px);width:var(--cw);aspect-ratio:3/4;border-radius:calc(var(--cw) * .16);background:#fff;
+  box-shadow:0 calc(var(--cw) * .06) 0 hsl(var(--h,30) 55% 72%),inset 0 0 0 calc(var(--cw) * .05) hsl(var(--h,30) 80% 88%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--cw) * .03);color:#4a3426}
+.lcard b{font-size:calc(var(--cw) * .44);line-height:1;color:hsl(var(--h) 75% 52%)}
+.lcard b i{font-style:normal;font-size:.6em;margin-left:.06em;opacity:.75}
+.lcard .lpic{font-size:calc(var(--cw) * .3);line-height:1}
+.lcard .lpic .lsvg svg{width:1em;height:1em}
+.lcard .lword{font-size:calc(var(--cw) * .11);letter-spacing:.04em;max-width:92%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lstars{display:flex}
+.lstars em{display:block;width:calc(var(--cw) * .17);aspect-ratio:1}
+.lstars svg{display:block;width:100%;height:100%}
+.lstars path{fill:#efe8df;stroke:#e2d6c6;stroke-width:1.6;stroke-linejoin:round}
+.lstars em.on path{fill:#ffcf33;stroke:#e09a00}
+.lcard.big{--cw:clamp(170px,min(34vw,44vh),300px);animation:cardin .9s cubic-bezier(.3,1.4,.5,1) backwards}
+@keyframes cardin{from{transform:scale(.2) rotateY(540deg);opacity:0}to{transform:none;opacity:1}}
+.lcard.hidden{background:#e9eef5;box-shadow:0 calc(var(--cw) * .06) 0 #c9d3e0}
+.lcard.hidden b{color:#b7c3d3}
+
+/* the album */
+.lpanel{width:min(96vw,980px);max-height:100%;overflow:auto;background:#fff;border-radius:36px;padding:clamp(12px,2.2vh,24px) clamp(14px,2.6vw,30px);
+  box-shadow:0 12px 0 rgba(0,0,0,.15);animation:popin .45s cubic-bezier(.3,1.6,.5,1)}
+.lhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.lalbumtitle{display:flex;align-items:center;gap:6px;background:#eef6ff;color:#4a3426;border-radius:999px;padding:6px 18px;font-weight:700;font-size:clamp(20px,3.6vmin,30px);box-shadow:0 4px 0 #b9d4f2}
+.lclose{width:56px;height:56px;background:#f1ece6;box-shadow:0 5px 0 #d8cfc4}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(64px,min(11vw,13vh),104px),1fr));gap:clamp(8px,1.4vw,14px);justify-items:center}
+.lslotcard{border:none;background:none;padding:0 0 8px;cursor:pointer;animation:popin .35s cubic-bezier(.3,1.6,.5,1) backwards}
+.lslotcard.bump{animation:starpop .4s cubic-bezier(.3,1.8,.5,1)}
+.lslotcard.nope{animation:shake .45s}
+.lalbumbtn{position:absolute;right:16px;bottom:16px;width:76px;height:76px;z-index:5;background:#86b9e8;box-shadow:0 7px 0 #5a8fc4}
+.lalbumbtn span{font-size:38px;line-height:1}
+.lalbumbtn b{position:absolute;top:-8px;left:50%;transform:translateX(-50%);background:#fff;color:#4a3426;border-radius:999px;padding:2px 8px;font-size:15px;box-shadow:0 2px 0 rgba(0,0,0,.15);white-space:nowrap}
+.lalbumbtn.bump{animation:starpop .45s cubic-bezier(.3,1.8,.5,1)}
+
+@media (max-aspect-ratio:1/1){
+  .lstage{--lt:clamp(48px,min(15vw,8vh),84px)}
+  .lball{--w:clamp(64px,min(22vw,13vh),120px)}
+  .lball.small{--w:clamp(50px,min(16vw,9vh),90px)}
+}
+/* small screens: the album button moves up next to the top-right buttons, out of the way of the answers */
+@media (max-width:640px){
+  .llang{top:16px;left:76px}
+  .lalbumbtn{top:12px;bottom:auto;right:140px;width:54px;height:54px}
+  .lalbumbtn span{font-size:26px}
+  .lalbumbtn b{top:auto;bottom:-12px;font-size:12px}
+  .loverlay{padding-top:78px}
+}
+/* phones held sideways: tighter everything */
+@media (max-height:500px) and (min-aspect-ratio:3/2){
+  .lstage{--lt:46px;top:84px}
+  .lball{--w:58px}
+  .lball.small{--w:46px}
+  .lpic.big{font-size:56px}
+  #lPoppy{height:84px}
+  .lalbumbtn{top:12px;bottom:auto;right:160px;width:56px;height:56px}
+  .lalbumbtn span{font-size:28px}
+}
+@media (prefers-reduced-motion:reduce){
+  .lball,.lmeet,.lgift span,.lslot.now{animation:none}
+}

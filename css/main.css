@@ -126,8 +126,8 @@ button:focus-visible{outline:4px solid #ffcf33;outline-offset:3px}
 
 /* ---------- menu ---------- */
 #menu .wrap{gap:3vh;padding:88px 16px 12px}
-.cards{--cw:min(17vw,24vh,200px);--gap:clamp(10px,2vw,24px);display:flex;flex-wrap:wrap;gap:var(--gap);justify-content:center;
-  max-width:calc(var(--cw) * 3 + var(--gap) * 2 + 2px)}
+.cards{--cw:min(15vw,22vh,190px);--per:4;--gap:clamp(10px,2vw,24px);display:flex;flex-wrap:wrap;gap:var(--gap);justify-content:center;
+  max-width:calc(var(--cw) * var(--per) + var(--gap) * (var(--per) - 1) + 2px)}
 .card{width:var(--cw);height:var(--cw);border:none;border-radius:30px;padding:calc(var(--cw) * .07);background:var(--cbg);box-shadow:0 10px 0 var(--cshadow);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;cursor:pointer;
   animation:popin .5s cubic-bezier(.3,1.6,.5,1) backwards;transition:transform .15s,box-shadow .15s}
@@ -199,7 +199,7 @@ button:focus-visible{outline:4px solid #ffcf33;outline-offset:3px}
 @keyframes glow{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 #ffcf33)}50%{transform:scale(1.08);filter:drop-shadow(0 0 14px #ffcf33)}}
 
 @media (max-aspect-ratio:1/1){
-  .cards{--cw:min(28vw,19vh,190px)}
+  .cards{--cw:min(28vw,17vh,190px);--per:3}
   #menu .poppy{height:min(24vh,230px)}
 }
 /* very wide, short screens (phones sideways): all cards on one row */

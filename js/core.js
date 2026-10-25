@@ -54,15 +54,18 @@ const sfx = {
 
 /* Poppy's voice (uses the browser's built-in speech) */
 const canSpeak = 'speechSynthesis' in window;
-let voice = null, sayTimer = null;
+let voices = {}, sayTimer = null;
+/* one voice per language; prefer friendly-sounding ones when the device has them */
 function pickVoice() {
   try {
-    const vs = speechSynthesis.getVoices().filter(v => /^en/i.test(v.lang));
-    voice = vs.find(v => /samantha|aria|jenny|google us english|zira|karen|moira|tessa|victoria|female/i.test(v.name)) || vs[0] || null;
+    const all = speechSynthesis.getVoices();
+    const find = (lang, names) => { const vs = all.filter(v => lang.test(v.lang)); return vs.find(v => names.test(v.name)) || vs[0] || null; };
+    voices.en = find(/^en/i, /samantha|aria|jenny|google us english|zira|karen|moira|tessa|victoria|female/i);
+    voices.fr = find(/^fr/i, /am[eé]lie|audrey|marie|virginie|julie|hortense|denise|aur[eé]lie|google fran/i);
   } catch (e) {}
 }
 if (canSpeak) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
-/* opts.pitch / opts.rate let other characters (like Bakery customers) sound different */
+/* opts.pitch / opts.rate let other characters (like Bakery customers) sound different; opts.lang is 'en' (default) or 'fr' */
 function say(text, opts = {}) {
   if (!soundOn || !canSpeak) return;
   try {
@@ -70,7 +73,8 @@ function say(text, opts = {}) {
     speechSynthesis.cancel();
     sayTimer = setTimeout(() => {
       const u = new SpeechSynthesisUtterance(text);
-      if (voice) { u.voice = voice; u.lang = voice.lang; } else u.lang = 'en-US';
+      const lang = opts.lang || 'en', v = voices[lang];
+      if (v) { u.voice = v; u.lang = v.lang; } else u.lang = lang === 'fr' ? 'fr-FR' : 'en-US';
       u.pitch = opts.pitch || 1.45; u.rate = opts.rate || 1.02;
       speechSynthesis.speak(u);
     }, 50);
