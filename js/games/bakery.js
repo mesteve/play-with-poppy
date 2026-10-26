@@ -534,7 +534,7 @@ function startBakery() {
 function stopBakery() { kClear(); closeShop(); }
 
 registerGame({
-  id: 'bakery', label: 'Bakery', say: "Poppy's bakery!", cardClass: 'c-bakery',
+  group: 'numbers', id: 'bakery', label: 'Bakery', say: "Poppy's bakery!", cardClass: 'c-bakery',
   icon: `<svg viewBox="0 0 100 100">
     <path d="M14 40h72l-6 14H20z" fill="#ff8fb3"/><path d="M14 40l8-16h56l8 16" fill="#fff" stroke="#ff8fb3" stroke-width="4" stroke-linejoin="round"/>
     <path d="M26 40v-16M40 40V24M54 40V24M68 40V24" stroke="#ff8fb3" stroke-width="4"/>

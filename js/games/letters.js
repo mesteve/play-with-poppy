@@ -414,7 +414,7 @@ function startLetters() {
 function stopLetters() { lClear(); closeOverlay(); }
 
 registerGame({
-  id: 'letters', label: 'ABC', say: 'A, B, C!', cardClass: 'c-letters',
+  group: 'words', id: 'letters', label: 'ABC', say: 'A, B, C!', cardClass: 'c-letters',
   icon: `<svg viewBox="0 0 100 100">
     <rect x="8" y="34" width="28" height="30" rx="7" fill="#ff7a7a" transform="rotate(-8 22 49)"/><text x="22" y="57" class="ico-num" transform="rotate(-8 22 49)">A</text>
     <rect x="36" y="44" width="28" height="30" rx="7" fill="#5ccf6a"/><text x="50" y="67" class="ico-num">B</text>

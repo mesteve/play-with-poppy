@@ -89,7 +89,7 @@ screen.addEventListener('pointerdown', e => {
 });
 
 registerGame({
-  id: 'bubbles', label: 'Bubbles', say: 'Bubbles!', cardClass: 'c-bubbles',
+  group: 'play', id: 'bubbles', label: 'Bubbles', say: 'Bubbles!', cardClass: 'c-bubbles',
   icon: `<svg viewBox="0 0 100 100">
     <circle cx="38" cy="60" r="25" fill="#cfe9ff" stroke="#4d9dff" stroke-width="4"/>
     <circle cx="70" cy="32" r="17" fill="#f3d9ff" stroke="#b46bff" stroke-width="4"/>

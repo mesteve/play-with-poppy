@@ -126,11 +126,14 @@ button:focus-visible{outline:4px solid #ffcf33;outline-offset:3px}
 
 /* ---------- menu ---------- */
 #menu .wrap{gap:3vh;padding:88px 16px 12px}
-.cards{--cw:min(15vw,22vh,190px);--per:4;--gap:clamp(10px,2vw,24px);display:flex;flex-wrap:wrap;gap:var(--gap);justify-content:center;
-  max-width:calc(var(--cw) * var(--per) + var(--gap) * (var(--per) - 1) + 2px)}
+.cards{--cw:min(15vw,21vh,190px);--per:4;--gap:clamp(10px,2vw,24px);display:flex;flex-direction:column;align-items:center;gap:var(--gap)}
+/* one row per kind of game: playing first, then numbers */
+.cardgroup{display:flex;flex-wrap:wrap;gap:var(--gap);justify-content:center;padding:10px;border-radius:36px;background:rgba(255,255,255,.22);
+  max-width:calc(var(--cw) * var(--per) + var(--gap) * (var(--per) - 1) + 22px)}
 .card{width:var(--cw);height:var(--cw);border:none;border-radius:30px;padding:calc(var(--cw) * .07);background:var(--cbg);box-shadow:0 10px 0 var(--cshadow);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;cursor:pointer;
   animation:popin .5s cubic-bezier(.3,1.6,.5,1) backwards;transition:transform .15s,box-shadow .15s}
+.cardgroup + .cardgroup .card{animation-delay:.3s}
 .card:nth-child(2){animation-delay:.09s}.card:nth-child(3){animation-delay:.18s}.card:nth-child(4){animation-delay:.27s}.card:nth-child(5){animation-delay:.36s}
 .ico-num{font-family:var(--font);font-weight:700;font-size:21px;fill:#fff;text-anchor:middle}
 .ico-num.s{font-size:14px}
@@ -199,12 +202,14 @@ button:focus-visible{outline:4px solid #ffcf33;outline-offset:3px}
 @keyframes glow{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 #ffcf33)}50%{transform:scale(1.08);filter:drop-shadow(0 0 14px #ffcf33)}}
 
 @media (max-aspect-ratio:1/1){
-  .cards{--cw:min(28vw,17vh,190px);--per:3}
+  .cards{--cw:min(26vw,16vh,190px);--per:3}
+  .cardgroup[data-count="4"]{--per:2}
   #menu .poppy{height:min(24vh,230px)}
 }
 /* very wide, short screens (phones sideways): all cards on one row */
 @media (min-aspect-ratio:2/1){
-  .cards{max-width:none}
+  .cards{flex-direction:row;flex-wrap:wrap;justify-content:center}
+  .cardgroup{max-width:none}
 }
 @media (max-width:640px){
   .cstage{top:128px}

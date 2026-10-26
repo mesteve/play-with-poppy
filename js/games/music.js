@@ -63,7 +63,7 @@ function startMusic() { say("Let's make music! Tap the colors!"); }
 function stopMusic() { songTok++; songBtn.classList.remove('playing'); mPoppy.classList.remove('dance'); }
 
 registerGame({
-  id: 'music', label: 'Music', say: 'Music!', cardClass: 'c-music',
+  group: 'play', id: 'music', label: 'Music', say: 'Music!', cardClass: 'c-music',
   icon: `<svg viewBox="0 0 100 100">
     <rect x="12" y="42" width="17" height="48" rx="5" fill="#ff5d5d"/>
     <rect x="33" y="46" width="17" height="40" rx="5" fill="#ffc93d"/>

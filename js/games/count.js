@@ -219,7 +219,7 @@ function startCount() { C.round = 0; C.tray.reset(); cRound(); }
 function stopCount() { cClear(); cBoard.innerHTML = ''; cRight.innerHTML = ''; }
 
 registerGame({
-  id: 'count', label: 'Counting', say: 'Counting!', cardClass: 'c-count',
+  group: 'numbers', id: 'count', label: 'Counting', say: 'Counting!', cardClass: 'c-count',
   icon: `<svg viewBox="0 0 100 100">
     <circle cx="19.5" cy="32" r="4.5" fill="#ff5d5d"/>
     <circle cx="44.5" cy="32" r="4.5" fill="#f2a900"/><circle cx="55.5" cy="32" r="4.5" fill="#f2a900"/>

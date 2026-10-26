@@ -5,9 +5,19 @@
 const startPoppy = makePoppy($('#startPoppy'), 'idle wave');
 const menuPoppy = makePoppy($('#menuPoppy'), 'idle wave');
 
-/* ================= Menu cards (one per registered game) ================= */
+/* ================= Menu cards (one per registered game, one row per kind of game) ================= */
 const cards = $('#cards');
+const GROUPS = ['play', 'numbers', 'words'];
 let lastHover = 0;
+const rows = {};
+GROUPS.forEach(name => {
+  const n = GAMES.filter(g => (g.group || 'play') === name).length;
+  if (!n) return;
+  rows[name] = document.createElement('div');
+  rows[name].className = 'cardgroup';
+  rows[name].dataset.count = n;
+  cards.appendChild(rows[name]);
+});
 GAMES.forEach(g => {
   const card = document.createElement('button');
   card.className = 'card ' + g.cardClass;
@@ -19,7 +29,7 @@ GAMES.forEach(g => {
     if (now - lastHover < 900) return;
     lastHover = now; say(g.say);
   });
-  cards.appendChild(card);
+  rows[g.group || 'play'].appendChild(card);
 });
 
 /* ================= Navigation ================= */

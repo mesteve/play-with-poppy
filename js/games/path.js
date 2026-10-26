@@ -1,46 +1,10 @@
-/* ================= Number path ================= */
+/* ================= Number path (1 and 2) ================= */
+/* One engine, several paths: makeNumberPath() builds a map of stepping stones from a list of levels. */
 (() => {
 'use strict';
-const screen = addScreen('path', `
-<div class="pview" id="pMapView">
-  <div class="pstat" id="pStat"></div>
-  <div class="pmap" id="pMap">
-    <svg class="pline" id="pLine" aria-hidden="true"></svg>
-    <div class="pstones" id="pStones"></div>
-    <div id="pMapPoppy"></div>
-  </div>
-  <button class="round preset" id="pReset" aria-label="Hold to start the path over" title="Grown-ups: hold to start over">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v4.5h4.5"/></svg>
-  </button>
-</div>
-<div class="pview" id="pLevel" hidden>
-  <div class="tray" id="pTray"></div>
-  <div class="cstage pstage">
-    <div class="prompt" id="pPrompt"></div>
-    <div class="board" id="pBoard"></div>
-    <div class="crow">
-      <div id="pPoppy"></div>
-      <div class="cright" id="pRight"></div>
-    </div>
-  </div>
-</div>
-<div class="presult" id="pResult"></div>
-`);
-
-/* A map of stepping stones. Each stone is a 5-question level that earns 1-3 stars
-   and a sticker; finishing a stone unlocks the next. Progress lives in localStorage. */
-const PATH_KEY = 'poppy-path';
-const STICKERS = ['🐞', '🌻', '🐢', '🍓', '🦋', '🌈', '🐙', '🚀', '🦄', '🍦', '🐳', '👑', '🐬', '🍉', '🎈', '🦖', '🐧', '🌟', '🦩', '🏆'];
 const HARD = { more: { max: 8, fewer: true }, match: { max: 10 }, pattern: { kinds: ['ABC', 'AAB', 'ABB'] }, missing: { max: 10 }, takeaway: { max: 8 }, bigger: { max: 10 } };
 /* stones 13-20: the same questions with slightly bigger numbers and longer patterns */
 const HARDER = { more: { max: 10, fewer: true }, match: { max: 12 }, pattern: { kinds: ['AABB', 'ABCC', 'ABAC'] }, missing: { max: 15 }, takeaway: { max: 10 }, bigger: { max: 15 } };
-const LEVELS = [
-  { t: 'more', max: 5 }, { t: 'match', max: 5 }, { t: 'pattern', kinds: ['AB'] }, { t: 'missing', max: 5 },
-  { t: 'takeaway', max: 5 }, { t: 'more', ...HARD.more }, { t: 'match', ...HARD.match }, { t: 'pattern', ...HARD.pattern },
-  { t: 'missing', ...HARD.missing }, { t: 'takeaway', ...HARD.takeaway }, { t: 'bigger', ...HARD.bigger }, { t: 'mix', set: HARD },
-  { t: 'more', ...HARDER.more }, { t: 'match', ...HARDER.match }, { t: 'pattern', ...HARDER.pattern }, { t: 'missing', ...HARDER.missing },
-  { t: 'takeaway', ...HARDER.takeaway }, { t: 'bigger', ...HARDER.bigger }, { t: 'missing', max: 20 }, { t: 'mix', set: HARDER }
-];
 const PAT = FRUITS.filter(f => ['🍎', '🍌', '🐟', '🌸', '🥕', '🍪'].includes(f.e));
 const CREATURES = [
   { e: '🦆', one: 'duck', many: 'ducks', v1: 'swims away', vn: 'swim away' },
@@ -53,20 +17,51 @@ const CREATURES = [
 const LOCK = '<svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5" fill="currentColor"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5" fill="none" stroke="currentColor" stroke-width="2.6"/></svg>';
 const PLAY_ICON = '<svg viewBox="0 0 24 24"><path fill="#fff" d="M6 3.5v17a1 1 0 0 0 1.5.86l14-8.5a1 1 0 0 0 0-1.72l-14-8.5A1 1 0 0 0 6 3.5z"/></svg>';
 
+function makeNumberPath(cfg) {
+const screen = addScreen(cfg.id, `
+<div class="pview" data-r="pMapView">
+  <div class="pstat" data-r="pStat"></div>
+  <div class="pmap" data-r="pMap">
+    <svg class="pline" data-r="pLine" aria-hidden="true"></svg>
+    <div class="pstones" data-r="pStones"></div>
+    <div class="pmappoppy" data-r="pMapPoppy"></div>
+  </div>
+  <button class="round preset" data-r="pReset" aria-label="Hold to start the path over" title="Grown-ups: hold to start over">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v4.5h4.5"/></svg>
+  </button>
+</div>
+<div class="pview" data-r="pLevel" hidden>
+  <div class="tray" data-r="pTray"></div>
+  <div class="cstage pstage">
+    <div class="prompt" data-r="pPrompt"></div>
+    <div class="board pboard" data-r="pBoard"></div>
+    <div class="crow">
+      <div class="ppoppy" data-r="pPoppy"></div>
+      <div class="cright" data-r="pRight"></div>
+    </div>
+  </div>
+</div>
+<div class="presult" data-r="pResult"></div>
+`);
+const q = r => screen.querySelector(`[data-r="${r}"]`);
+
+/* A map of stepping stones. Each stone is a 5-question level that earns 1-3 stars
+   and a sticker; finishing a stone unlocks the next. Progress lives in localStorage. */
+
 let pSave = { stars: [] };
 try {
-  const s = JSON.parse(localStorage.getItem(PATH_KEY));
-  if (s && Array.isArray(s.stars)) pSave.stars = s.stars.slice(0, LEVELS.length).map(n => clamp(n | 0, 0, 3));
+  const s = JSON.parse(localStorage.getItem(cfg.key));
+  if (s && Array.isArray(s.stars)) pSave.stars = s.stars.slice(0, cfg.levels.length).map(n => clamp(n | 0, 0, 3));
 } catch (e) {}
-function savePath() { try { localStorage.setItem(PATH_KEY, JSON.stringify(pSave)); } catch (e) {} }
+function savePath() { try { localStorage.setItem(cfg.key, JSON.stringify(pSave)); } catch (e) {} }
 const starsOf = i => pSave.stars[i] || 0;
-function nextLevel() { for (let i = 0; i < LEVELS.length; i++) if (!starsOf(i)) return i; return -1; }
+function nextLevel() { for (let i = 0; i < cfg.levels.length; i++) if (!starsOf(i)) return i; return -1; }
 
-const pMapView = $('#pMapView'), pLevelEl = $('#pLevel'), pMap = $('#pMap'), pStones = $('#pStones'), pLine = $('#pLine'), pStat = $('#pStat'), pResult = $('#pResult');
-const pPrompt = $('#pPrompt'), pBoard = $('#pBoard'), pRight = $('#pRight');
-const pPoppy = makePoppy($('#pPoppy'), 'idle'), pMapPoppy = makePoppy($('#pMapPoppy'), 'idle');
+const pMapView = q('pMapView'), pLevelEl = q('pLevel'), pMap = q('pMap'), pStones = q('pStones'), pLine = q('pLine'), pStat = q('pStat'), pResult = q('pResult');
+const pPrompt = q('pPrompt'), pBoard = q('pBoard'), pRight = q('pRight');
+const pPoppy = makePoppy(q('pPoppy'), 'idle'), pMapPoppy = makePoppy(q('pMapPoppy'), 'idle');
 const P = { view: 'map', level: 0, mistakes: 0, wrong: 0, busy: false, answer: null, rightEl: null, hint: null, onRight: null,
-  question: '', tok: 0, timers: [], tray: makeTray($('#pTray'), 5), lastType: '', lastN: 0, item: null, greeted: false };
+  question: '', tok: 0, timers: [], tray: makeTray(q('pTray'), 5), lastType: '', lastN: 0, item: null, greeted: false };
 const pLater = (fn, ms) => { const tok = P.tok; P.timers.push(setTimeout(() => { if (tok === P.tok) fn(); }, ms)); };
 const pClear = () => { P.timers.forEach(clearTimeout); P.timers = []; P.tok++; };
 function pRand(lo, hi) {
@@ -89,23 +84,23 @@ function showMap(from) {
   renderMap(from);
   const nx = nextLevel();
   const line = nx < 0 ? 'You finished the whole path! Play any stone again!'
-    : !P.greeted ? 'Welcome to the number path! Tap the orange stone!'
+    : !P.greeted ? cfg.welcome
     : from != null ? 'Hooray! A new stone!' : pick(["Let's go! Tap the orange stone!", 'Where next? Tap the orange stone!']);
   P.greeted = true;
   pLater(() => say(line), 300);
 }
 function renderMap(from) {
   const nx = nextLevel(), total = pSave.stars.reduce((a, b) => a + (b || 0), 0);
-  pStat.innerHTML = `${STAR}<b>${total}</b><span>/ ${LEVELS.length * 3}</span>`;
+  pStat.innerHTML = `${STAR}<b>${total}</b><span>/ ${cfg.levels.length * 3}</span>`;
   pStones.innerHTML = '';
-  LEVELS.forEach((L, i) => {
+  cfg.levels.forEach((L, i) => {
     const st = starsOf(i), locked = nx >= 0 && i > nx;
     const b = document.createElement('button');
     b.className = 'stone' + (st ? ' done' : '') + (i === nx ? ' current' : '') + (locked ? ' locked' : '');
     b.style.animationDelay = i * 40 + 'ms';
     b.setAttribute('aria-label', `Level ${i + 1}` + (locked ? ', locked' : st ? `, ${st} stars` : ''));
     b.innerHTML = `<b>${i + 1}</b>`
-      + (st ? `<span class="stk">${STICKERS[i]}</span><span class="sst">${[1, 2, 3].map(k => `<i class="${k <= st ? 'on' : ''}">${STAR}</i>`).join('')}</span>` : '')
+      + (st ? `<span class="stk">${cfg.stickers[i]}</span><span class="sst">${[1, 2, 3].map(k => `<i class="${k <= st ? 'on' : ''}">${STAR}</i>`).join('')}</span>` : '')
       + (locked ? `<span class="lock">${LOCK}</span>` : '');
     b.addEventListener('click', () => tapStone(i, b, locked));
     pStones.appendChild(b);
@@ -116,7 +111,8 @@ function renderMap(from) {
 function layoutMap(from) {
   const W = pMap.clientWidth, H = pMap.clientHeight;
   if (!W || !H) return;
-  const cols = W > H * 2.2 ? 7 : W > H * 1.1 ? 5 : 4, rows = Math.ceil(LEVELS.length / cols);
+  const big = cfg.levels.length > 20;
+  const cols = W > H * 2.2 ? (big ? 10 : 7) : W > H * 1.1 ? (big ? 6 : 5) : (big ? 5 : 4), rows = Math.ceil(cfg.levels.length / cols);
   /* stones shrink to leave room for Poppy above and the stars below */
   pStones.style.setProperty('--s', Math.round(clamp(Math.min((W / cols) * 0.62, (H / rows) * 0.5), 40, 110)) + 'px');
   pStones.style.setProperty('--pc', cols);
@@ -138,7 +134,7 @@ function layoutMap(from) {
   }
   pLine.setAttribute('viewBox', `0 0 ${W} ${H}`);
   pLine.innerHTML = `<path class="road" d="${d}"/><path class="dash" d="${d}"/>`;
-  const nx = nextLevel(), target = nx < 0 ? LEVELS.length - 1 : nx;
+  const nx = nextLevel(), target = nx < 0 ? cfg.levels.length - 1 : nx;
   if (from != null && from !== target) {
     placePoppy(from, false);
     pLater(() => {
@@ -171,10 +167,10 @@ function tapStone(i, el, locked) {
   sfx.tap();
   startLevel(i);
 }
-window.addEventListener('resize', () => { if (NAV.current === 'path' && P.view === 'map') layoutMap(); });
+window.addEventListener('resize', () => { if (NAV.current === cfg.id && P.view === 'map') layoutMap(); });
 
 /* Grown-ups: press and hold the little button to start the path over */
-const pReset = $('#pReset');
+const pReset = q('pReset');
 let holdTimer = null;
 pReset.addEventListener('pointerdown', e => {
   e.preventDefault();
@@ -203,7 +199,7 @@ function pRound(first) {
   pClear();
   P.busy = false; P.wrong = 0; P.answer = null; P.rightEl = null; P.hint = null; P.onRight = null;
   pBoard.innerHTML = ''; pRight.innerHTML = '';
-  const L = LEVELS[P.level];
+  const L = cfg.levels[P.level];
   let t = L.t, opt = L;
   if (t === 'mix') { t = pick(Object.keys(L.set).filter(k => k !== P.lastType)); opt = L.set[t]; }
   P.lastType = t;
@@ -343,13 +339,15 @@ const BUILD = {
   },
   /* What comes next in the pattern? */
   pattern(o) {
-    const kind = pick(o.kinds), items = shuffle(PAT).slice(0, 4);
+    const kind = pick(o.kinds), items = shuffle(PAT).slice(0, 5);
     const unit = kind.split('').map(ch => items[ch.charCodeAt(0) - 65]);
     const len = unit.length === 4 ? randInt(6, 8) : unit.length * 2 + randInt(0, 1), seq = [];
     for (let i = 0; i < len; i++) seq.push(unit[i % unit.length]);
     const ans = unit[len % unit.length];
     const choices = [...new Set(unit)];
     if (choices.length < 3) choices.push(items[3]);
+    /* four different things in the pattern: offer the answer and two others */
+    if (choices.length > 3) choices.splice(choices.findIndex(c => c !== ans), 1);
     P.answer = ans.e;
     const tiles = tileRow([...seq.map(x => x.e), '?']);
     const blank = tiles[tiles.length - 1];
@@ -368,14 +366,17 @@ const BUILD = {
   },
   /* A row of numbers with a gap */
   missing(o) {
-    const L = o.max <= 5 ? 4 : 5, start = pRand(1, o.max - L + 1), idx = randInt(1, L - 1), ans = start + idx;
+    const L = o.max <= 5 ? 4 : 5, start = pRand(1, o.max - L + 1), idx = randInt(1, L - 1);
+    /* o.down: the row counts down (5, 4, ?, 2) */
     const nums = Array.from({ length: L }, (_, i) => start + i);
+    if (o.down) nums.reverse();
+    const ans = nums[idx];
     P.answer = ans;
     const tiles = tileRow(nums.map((n, i) => (i === idx ? '?' : String(n))));
     tiles.forEach(t => t.classList.add('num'));
     numAnswers(ans, 1, o.max, false);
-    pSetPrompt(`<span class="w">Missing</span><span class="q">?</span>`);
-    P.question = 'Which number is missing?';
+    pSetPrompt(`<span class="w">Missing</span><span class="q">?</span>` + (o.down ? '<span class="w">⬇</span>' : ''));
+    P.question = o.down ? "Let's count down! Which number is missing?" : 'Which number is missing?';
     P.onRight = () => { tiles[idx].textContent = ans; tiles[idx].classList.remove('blank'); };
     P.hint = () => {
       say(nums.slice(0, idx).map(Word).join(', ') + '... What comes next?');
@@ -388,7 +389,7 @@ const BUILD = {
   },
   /* A little story: some animals leave, how many are left? */
   takeaway(o, intro) {
-    const total = pRand(2, o.max), k = randInt(1, Math.min(3, total - 1)), left = total - k, c = pItem(CREATURES);
+    const total = pRand(2, o.max), k = randInt(1, Math.min(o.k || 3, total - 1)), left = total - k, c = pItem(CREATURES);
     const verb = k === 1 ? c.v1 : c.vn;
     P.answer = left;
     P.busy = true;
@@ -407,6 +408,24 @@ const BUILD = {
       pLater(() => countAlong(tiles.slice(0, left), () => { P.busy = false; say(`${Word(left)}! Which one is ${WORDS[left]}?`); }), 900);
     };
     return true;
+  },
+  /* Two groups: how many altogether? (first additions) */
+  add(o) {
+    const total = pRand(2, o.max), a = randInt(1, total - 1), b = total - a, f = pItem(FRUITS);
+    P.answer = total;
+    const left = tileRow(Array(a).fill(f.e), Math.min(a, 5));
+    const plus = document.createElement('div');
+    plus.className = 'plus'; plus.textContent = '+';
+    pBoard.appendChild(plus);
+    const right = tileRow(Array(b).fill(f.e), Math.min(b, 5));
+    numAnswers(total, 2, o.max, true);
+    pSetPrompt(`<span>${a}</span><span>${f.e}</span><span>+</span><span>${b}</span><span class="q">?</span>`);
+    P.question = `${Word(a)} ${nm(f, a)}, and ${WORDS[b]} more. How many altogether?`;
+    P.hint = () => {
+      P.busy = true;
+      say("Let's count them all!");
+      pLater(() => countAlong([...left, ...right], () => { P.busy = false; say(`${Word(total)}! Which one is ${WORDS[total]}?`); }), 900);
+    };
   },
   /* Two written numbers: which is bigger? */
   bigger(o) {
@@ -460,7 +479,7 @@ function finishLevel() {
   const allDone = nextLevel() < 0;
   bigCelebrate();
   pResult.innerHTML = `<div class="rcard"><div class="rstars">${('<div class="slot">' + STAR + '</div>').repeat(3)}</div>`
-    + (firstTime ? `<div class="rsticker">${STICKERS[i]}</div>` : '')
+    + (firstTime ? `<div class="rsticker">${cfg.stickers[i]}</div>` : '')
     + `<button class="play rnext" aria-label="Back to the path">${PLAY_ICON}</button></div>`;
   pResult.classList.add('show');
   const slots = pResult.querySelectorAll('.slot');
@@ -474,13 +493,7 @@ function startPath() { showMap(); }
 function stopPath() { pClear(); P.view = 'map'; pResult.classList.remove('show'); }
 
 registerGame({
-  id: 'path', label: 'Number path', say: 'Number path!', cardClass: 'c-path',
-  icon: `<svg viewBox="0 0 100 100">
-    <path d="M18 82Q34 84 44 68T70 50Q84 44 82 26" stroke="#f08fb0" stroke-width="5" stroke-dasharray="1 9" stroke-linecap="round" fill="none"/>
-    <circle cx="18" cy="82" r="12" fill="#ffb13d"/><circle cx="44" cy="66" r="12" fill="#ff7a3d"/><circle cx="70" cy="50" r="12" fill="#ff5d8a"/>
-    <text x="18" y="87" class="ico-num s">1</text><text x="44" y="71" class="ico-num s">2</text><text x="70" y="55" class="ico-num s">3</text>
-    <path d="M82 9l3.6 7.6 8.2 1-6 5.7 1.6 8.2L82 27.4l-7.4 4.1 1.6-8.2-6-5.7 8.2-1z" fill="#ffcf33" stroke="#e09a00" stroke-width="1.6" stroke-linejoin="round"/>
-  </svg>`,
+  id: cfg.id, label: cfg.label, say: cfg.say, cardClass: cfg.cardClass, group: 'numbers', icon: cfg.icon,
   start: startPath, stop: stopPath,
   /* inside a level, Home goes back to the map */
   onHome() {
@@ -495,5 +508,55 @@ registerGame({
     const b = pRight.querySelector(`.ans[data-v="${v}"]`) || pBoard.querySelector(`.pick[data-v="${v}"]`);
     if (b) b.click();
   }
+});
+}
+
+/* ---------------- the paths ---------------- */
+const P1 = [
+  { t: 'more', max: 5 }, { t: 'match', max: 5 }, { t: 'pattern', kinds: ['AB'] }, { t: 'missing', max: 5 },
+  { t: 'takeaway', max: 5 }, { t: 'more', ...HARD.more }, { t: 'match', ...HARD.match }, { t: 'pattern', ...HARD.pattern },
+  { t: 'missing', ...HARD.missing }, { t: 'takeaway', ...HARD.takeaway }, { t: 'bigger', ...HARD.bigger }, { t: 'mix', set: HARD },
+  { t: 'more', ...HARDER.more }, { t: 'match', ...HARDER.match }, { t: 'pattern', ...HARDER.pattern }, { t: 'missing', ...HARDER.missing },
+  { t: 'takeaway', ...HARDER.takeaway }, { t: 'bigger', ...HARDER.bigger }, { t: 'missing', max: 20 }, { t: 'mix', set: HARDER }
+];
+/* Number path 2: 30 stones in 5 steps of 6. It starts a little below where path 1 ends and gets
+   harder very slowly. New along the way: adding two groups, counting down, take-aways of 4,
+   and patterns with 4 different things. The 6th stone of each step mixes everything of that step. */
+const S2 = [
+  { more: { max: 10, fewer: true }, match: { max: 10 }, pattern: { kinds: ['ABC', 'AAB', 'ABB'] }, missing: { max: 12 }, takeaway: { max: 8 }, bigger: { max: 12 }, add: { max: 5 } },
+  { more: { max: 10, fewer: true }, match: { max: 12 }, pattern: { kinds: ['AABB', 'ABAC', 'ABCC'] }, missing: { max: 15 }, takeaway: { max: 10 }, bigger: { max: 15 }, add: { max: 6 } },
+  { more: { max: 12, fewer: true }, match: { max: 12 }, pattern: { kinds: ['ABCD', 'AABB', 'ABBC'] }, missing: { max: 20 }, takeaway: { max: 10 }, bigger: { max: 20 }, add: { max: 7 } },
+  { more: { max: 12, fewer: true }, match: { max: 15 }, pattern: { kinds: ['ABCD', 'AABC', 'ABBC'] }, missing: { max: 10, down: true }, takeaway: { max: 12, k: 4 }, bigger: { max: 20 }, add: { max: 8 } },
+  { more: { max: 15, fewer: true }, match: { max: 15 }, pattern: { kinds: ['ABCD', 'AABC', 'ABCC'] }, missing: { max: 20, down: true }, takeaway: { max: 12, k: 4 }, bigger: { max: 20 }, add: { max: 10 } }
+];
+const P2 = [
+  { t: 'add', ...S2[0].add }, { t: 'more', ...S2[0].more }, { t: 'pattern', ...S2[0].pattern }, { t: 'missing', ...S2[0].missing }, { t: 'add', ...S2[0].add }, { t: 'mix', set: S2[0] },
+  { t: 'match', ...S2[1].match }, { t: 'add', ...S2[1].add }, { t: 'pattern', ...S2[1].pattern }, { t: 'takeaway', ...S2[1].takeaway }, { t: 'bigger', ...S2[1].bigger }, { t: 'mix', set: S2[1] },
+  { t: 'add', ...S2[2].add }, { t: 'missing', ...S2[2].missing }, { t: 'more', ...S2[2].more }, { t: 'pattern', ...S2[2].pattern }, { t: 'bigger', ...S2[2].bigger }, { t: 'mix', set: S2[2] },
+  { t: 'missing', ...S2[3].missing }, { t: 'add', ...S2[3].add }, { t: 'takeaway', ...S2[3].takeaway }, { t: 'match', ...S2[3].match }, { t: 'pattern', ...S2[3].pattern }, { t: 'mix', set: S2[3] },
+  { t: 'add', ...S2[4].add }, { t: 'missing', ...S2[4].missing }, { t: 'more', ...S2[4].more }, { t: 'takeaway', ...S2[4].takeaway }, { t: 'pattern', ...S2[4].pattern }, { t: 'mix', set: S2[4] }
+];
+
+makeNumberPath({
+  id: 'path', key: 'poppy-path', label: 'Number path', say: 'Number path!', cardClass: 'c-path', levels: P1,
+  welcome: 'Welcome to the number path! Tap the orange stone!',
+  stickers: ['🐞', '🌻', '🐢', '🍓', '🦋', '🌈', '🐙', '🚀', '🦄', '🍦', '🐳', '👑', '🐬', '🍉', '🎈', '🦖', '🐧', '🌟', '🦩', '🏆'],
+  icon: `<svg viewBox="0 0 100 100">
+    <path d="M18 82Q34 84 44 68T70 50Q84 44 82 26" stroke="#f08fb0" stroke-width="5" stroke-dasharray="1 9" stroke-linecap="round" fill="none"/>
+    <circle cx="18" cy="82" r="12" fill="#ffb13d"/><circle cx="44" cy="66" r="12" fill="#ff7a3d"/><circle cx="70" cy="50" r="12" fill="#ff5d8a"/>
+    <text x="18" y="87" class="ico-num s">1</text><text x="44" y="71" class="ico-num s">2</text><text x="70" y="55" class="ico-num s">3</text>
+    <path d="M82 9l3.6 7.6 8.2 1-6 5.7 1.6 8.2L82 27.4l-7.4 4.1 1.6-8.2-6-5.7 8.2-1z" fill="#ffcf33" stroke="#e09a00" stroke-width="1.6" stroke-linejoin="round"/>
+  </svg>`,
+});
+makeNumberPath({
+  id: 'path2', key: 'poppy-path2', label: 'Number path 2', say: 'Number path two!', cardClass: 'c-path2', levels: P2,
+  welcome: 'Welcome to number path two! Tap the orange stone!',
+  stickers: ['🐨', '🦁', '🐯', '🐼', '🦒', '🐘', '🦓', '🦔', '🐿️', '🦉', '🐊', '🦜', '🐠', '🦀', '🐌', '🌵', '🍄', '🌺', '🍒', '🥝', '🍩', '🍭', '🎨', '🪁', '🚂', '🛸', '🏰', '🎠', '🌋', '🥇'],
+  icon: `<svg viewBox="0 0 100 100">
+    <path d="M14 80Q30 86 40 70T66 56Q80 50 80 32" stroke="#7fb3f0" stroke-width="5" stroke-dasharray="1 9" stroke-linecap="round" fill="none"/>
+    <circle cx="14" cy="80" r="11" fill="#5cc0ff"/><circle cx="40" cy="70" r="11" fill="#4d9dff"/><circle cx="66" cy="56" r="11" fill="#7d6bff"/>
+    <text x="14" y="85" class="ico-num s">4</text><text x="40" y="75" class="ico-num s">5</text><text x="66" y="61" class="ico-num s">6</text>
+    <rect x="66" y="6" width="28" height="26" rx="8" fill="#ff7a3d"/><text x="80" y="25" class="ico-num">2</text>
+  </svg>`
 });
 })();

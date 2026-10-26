@@ -107,7 +107,7 @@ function startHide() { Hs.tray.reset(); newRound(true); }
 function stopHide() { clearLater(); }
 
 registerGame({
-  id: 'hide', label: 'Hide & seek', say: 'Hide and seek!', cardClass: 'c-hide',
+  group: 'play', id: 'hide', label: 'Hide & seek', say: 'Hide and seek!', cardClass: 'c-hide',
   icon: `<svg viewBox="0 0 100 100">
     <path class="f-fox" d="M30 46 38 16 54 38Z"/><path class="f-fox" d="M70 46 62 16 46 38Z"/>
     <path class="f-ink" opacity=".8" d="M35 40 39 25 47 36Z"/><path class="f-ink" opacity=".8" d="M65 40 61 25 53 36Z"/>

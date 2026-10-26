@@ -1,6 +1,7 @@
 /* ---------- Number path ---------- */
 .c-path{--cbg:#ffe3ec;--cshadow:#f08fb0}
-#pPoppy{flex:none;height:clamp(104px,min(24vh,30vw),200px)}
+.c-path2{--cbg:#e4ecff;--cshadow:#8fa8ec}
+.ppoppy{flex:none;height:clamp(104px,min(24vh,30vw),200px)}
 /* ---------- number path: map ---------- */
 .pview{position:absolute;inset:0}
 .pview[hidden]{display:none}
@@ -32,14 +33,14 @@
 .sst i.on path{fill:#ffcf33}
 .lock{position:absolute;right:-8%;bottom:-8%;width:40%;aspect-ratio:1;border-radius:50%;background:#fff;color:#a08e80;display:grid;place-items:center;box-shadow:0 2px 0 rgba(0,0,0,.15)}
 .lock svg{width:60%;height:60%}
-#pMapPoppy{position:absolute;left:0;top:0;z-index:2}
+.pmappoppy{position:absolute;left:0;top:0;z-index:2}
 .preset{position:absolute;right:16px;bottom:16px;width:48px;height:48px;z-index:5;opacity:.7}
 .preset svg{width:50%;height:50%}
 .preset.holding{background:#ff8a8a;transform:scale(1.2);transition:background 1.5s linear,transform 1.5s linear}
 
 /* ---------- number path: levels ---------- */
 .pstage{--ptok:clamp(22px,min(5.4vw,6.6vh),60px)}
-#pBoard{flex-wrap:wrap;align-content:center}
+.pboard{flex-wrap:wrap;align-content:center}
 .prompt .w{font-size:.82em}
 .pick{position:relative;border:none;border-radius:26px;padding:clamp(10px,1.6vw,18px);background:rgba(255,255,255,.9);box-shadow:0 7px 0 rgba(0,0,0,.12);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;color:#4a3426;
@@ -71,7 +72,7 @@
 
 @media (max-aspect-ratio:1/1){
   .pstage{--ptok:clamp(24px,min(8.5vw,4.6vh),56px)}
-  #pBoard{flex-direction:column}
+  .pboard{flex-direction:column}
 }
 @media (max-width:640px){
   .pstat{top:82px}
